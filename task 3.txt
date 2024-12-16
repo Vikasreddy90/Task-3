@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #404040;
+        }
+        h1 {
+            color: #dedede;
+        }
+        .quiz-container {
+            width: 700px;
+            padding: 20px;
+            background-color: #d9d9d9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 5px 0;
+        }
+        button {
+            margin-top: 25px;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Quiz</h1>
+    <div class="quiz-container" id="quizContainer">
+        <div id="questionContainer"></div>
+        <button onclick="submitQuiz()">Submit Quiz</button>
+        <p class="result" id="result"></p>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "Berlin", "Madrid", "Rome"],
+                answer: "Paris"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                answer: "4"
+            },
+            {
+                question: "What is the color of the sky?",
+                options: ["Blue", "Green", "Red", "Yellow"],
+                answer: "Blue"
+            }
+        ];
+
+        const questionContainer = document.getElementById('questionContainer');
+        let userAnswers = [];
+
+        function loadQuiz() {
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.innerHTML = `<p>${q.question}</p>`;
+                
+                const optionsList = document.createElement('ul');
+                optionsList.classList.add('options');
+
+                q.options.forEach(option => {
+                    const optionItem = document.createElement('li');
+                    optionItem.innerHTML = `
+                        <input type="radio" name="question${index}" value="${option}">
+                        ${option}
+                    `;
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionDiv.appendChild(optionsList);
+                questionContainer.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            const selectedOptions = document.querySelectorAll('input[type="radio"]:checked');
+            let score = 0;
+            selectedOptions.forEach((option, index) => {
+                if (option.value === questions[index].answer) {
+                    score++;
+                }
+            });
+            document.getElementById('result').textContent = `You scored ${score} out of ${questions.length}`;
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>
